@@ -1,0 +1,12 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "",
+      "FUNCTIONS_WORKER_RUNTIME": "node",
+      "course":"devops",
+      "getApikeyUrl":"https://xxx.azurewebsites.net/api/GetApiKeyFunction?code=",
+      "graderFunctionUrl":"https://xxx.azurewebsites.net/api/AzureGraderFunction?code=",
+      "gameTaskFunctionUrl":"https://xxx.azurewebsites.net/api/GameTaskFunction?code=",
+      "storageAccountConnectionString": ""
+    }
+  }

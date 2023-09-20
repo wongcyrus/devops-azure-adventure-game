@@ -1,0 +1,21 @@
+{
+    "name": "api",
+    "version": "1.0.0",
+    "description": "",
+    "engines": {
+        "node": ">=16.0.0"
+    },
+    "scripts": {
+        "start": "func start",
+        "test": "echo \"No tests yet...\""
+    },
+    "dependencies": {
+        "@azure/data-tables": "^13.2.2",
+        "@azure/storage-blob": "^12.15.0",
+        "axios": "^1.5.0",
+        "form-data": "^4.0.0",
+        "parse-multipart-data": "^1.5.0",
+        "qs": "^6.11.2",
+        "temp": "^0.9.4"
+    }
+}

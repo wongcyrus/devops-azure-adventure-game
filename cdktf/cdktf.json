@@ -1,0 +1,16 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "be009bf8-2b9f-4c18-9052-1ff72e5d0c4c",
+  "sendCrashReports": "true",
+  "terraformProviders": [
+    "azure/azapi@~> 1.9.0",
+    "hashicorp/azurerm@~> 3.72.0",
+    "hashicorp/azuread@~> 2.41.0",
+    "integrations/github@~> 5.33.0"
+  ],
+  "terraformModules": [],
+  "context": {
+
+  }
+}

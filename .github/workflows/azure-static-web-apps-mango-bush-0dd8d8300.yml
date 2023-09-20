@@ -1,0 +1,71 @@
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+# Environment variables available to all jobs and steps in this workflow
+env:
+  APP_LOCATION: "/" # location of your client code
+  API_LOCATION: "api" # location of your api source code - optional
+  APP_ARTIFACT_LOCATION: "build" # location of client code build output
+  AZURE_STATIC_WEB_APPS_API_TOKEN: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }} # secret containing deployment token for your static web app
+  AADB2C_PROVIDER_CLIENT_ID: ${{ secrets.AADB2C_PROVIDER_CLIENT_ID }}
+  AADB2C_PROVIDER_CLIENT_SECRET: ${{ secrets.AADB2C_PROVIDER_CLIENT_SECRET }}
+
+permissions:
+  contents: read
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Replace credentials
+        run: |
+          sed -i "s/TENANT_ID/${{ secrets.TENANT_ID }}/g" app_location/staticwebapp.config.json
+          sed -i "s/AADB2C_PROVIDER_CLIENT_ID/${{ secrets.AADB2C_PROVIDER_CLIENT_ID }}/g" app_location/staticwebapp.config.json
+          sed -i "s/AADB2C_PROVIDER_CLIENT_SECRET/${{ secrets.AADB2C_PROVIDER_CLIENT_SECRET }}/g" app_location/staticwebapp.config.json
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: api/package-lock.json
+      - run: cd api/ && npm install  
+
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: ${{ env.APP_LOCATION }} # App source code path
+          api_location: ${{ env.API_LOCATION }} # Api source code path - optional
+          output_location: ${{ env.APP_ARTIFACT_LOCATION }} # Built app content directory - optional
+          ###### End of Repository/Build Configurations ######
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ env.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: "close"
