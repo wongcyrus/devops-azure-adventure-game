@@ -149,7 +149,7 @@ function App() {
   const checkTasks = (heroSprite, detail, task) => {
     setTimeout(() => {
       let formData = new FormData();     
-      formData.append('filter', task ? task.filter : "");
+      formData.append('filter', task ? task.name : "");
 
       const tasks = detail.tasks;
       const headers = {}
