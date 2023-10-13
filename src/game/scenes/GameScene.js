@@ -405,6 +405,11 @@ export default class GameScene extends Scene {
             this.updateHeroCoinUi(this.heroSprite.coin);
         };
 
+        this.heroSprite.resetCoin = () => {
+            this.heroSprite.coin = 0;
+            this.updateHeroCoinUi(this.heroSprite.coin);
+        };
+
         this.heroSprite.takeDamage = (damage) => {
             this.time.delayedCall(
                 180,
